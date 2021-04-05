@@ -1,0 +1,28 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+}
+
+type Group {
+    id: ID!
+    name: String
+}
+
+type Query {
+    user(id: ID!): User!
+    users: [User!]!
+}
+
+type User {
+    email: String
+    group: Group!
+    id: String!
+    role: Role!
+    username: String!
+}
+
+enum Role {
+    ADMIN
+    USER
+}
