@@ -2,6 +2,8 @@ query Query($id: ID!){
     user(id: $id){
         id
         username
+        role
+        email
         group{
             id
             name

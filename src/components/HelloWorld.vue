@@ -5,19 +5,17 @@
       <input v-model="id"/>
     </label>
     <button @click="getUserById">Search</button>
+    <h3>{{ user.id }}</h3>
     <h3>{{ user.username }}</h3>
+    <h3>{{ user.role }}</h3>
+    <h3>{{ user.email }}</h3>
   </div>
 </template>
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
-import {ApolloClient, gql, InMemoryCache} from '@apollo/client';
-import {User} from '@/api/types/types'
-
-const client = new ApolloClient({
-  uri: 'http://localhost:8080/graphql',
-  cache: new InMemoryCache()
-});
+import queryUserById from './../api/gql/queryUserById.gql'
+import {Query, User} from '@/api/types/types'
 
 @Component
 export default class HelloWorld extends Vue {
@@ -25,24 +23,14 @@ export default class HelloWorld extends Vue {
   user: User | {} = {}
 
   getUserById() {
-    this.user = client.query<User>({
-      query: gql`
-          query Query($id: ID!){
-              user(id: $id){
-                  id
-                  username
-                  group{
-                      id
-                      name
-                  }
-              }
-          }
-      `,
+    this.$apollo.query<Query>({
+      query: queryUserById,
       variables: {
         id: this.id
       }
+    }).then(result => {
+      this.user = result.data.user
     })
-
   }
 }
 </script>
